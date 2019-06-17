@@ -4,8 +4,7 @@ import installExtension, {
 } from "electron-devtools-installer";
 import { enableLiveReload } from "electron-compile";
 require("update-electron-app")({
-  repo: "jessy-bgl/wekan-reporting",
-  updateInterval: "5 minutes"
+  repo: "jessy-bgl/wekan-reporting"
 });
 
 // Keep a global reference of the window object, if you don't, the window will
