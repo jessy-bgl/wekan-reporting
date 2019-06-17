@@ -12,9 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 const styles = theme => ({
-  background: {
-    //test
-  },
+  background: {},
   root: {
     overflowX: "auto"
   },
