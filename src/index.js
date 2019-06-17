@@ -3,6 +3,10 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
 import { enableLiveReload } from "electron-compile";
+require("update-electron-app")({
+  repo: "jessy-bgl/wekan-reporting",
+  updateInterval: "5 minutes"
+});
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
