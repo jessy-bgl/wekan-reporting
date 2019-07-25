@@ -3,9 +3,8 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
 import { enableLiveReload } from "electron-compile";
-require("update-electron-app")({
-  repo: "jessy-bgl/wekan-reporting"
-});
+
+require("update-electron-app")({ repo: "jessy-bgl/wekan-reporting" });
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -17,10 +16,7 @@ if (isDevMode) enableLiveReload({ strategy: "react-hmr" });
 
 const createWindow = async () => {
   // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600
-  });
+  mainWindow = new BrowserWindow({ width: 800, height: 600 });
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`);
