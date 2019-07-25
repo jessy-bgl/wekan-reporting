@@ -1,4 +1,5 @@
 import React from "react";
+import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -15,24 +16,26 @@ function renderNbCards(elem) {
 }
 
 const MyTable = ({ columns, data }) => (
-  <Table>
-    <TableHead>
-      <TableRow>
-        {columns.map(column => (
-          <TableCell>{column}</TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {data.map(d => (
+  <Paper style={{ overflowX: "auto" }}>
+    <Table>
+      <TableHead>
         <TableRow>
-          {d.map(e => (
-            <TableCell>{renderNbCards(e)}</TableCell>
+          {columns.map(column => (
+            <TableCell>{column}</TableCell>
           ))}
         </TableRow>
-      ))}
-    </TableBody>
-  </Table>
+      </TableHead>
+      <TableBody>
+        {data.map(d => (
+          <TableRow>
+            {d.map(e => (
+              <TableCell>{renderNbCards(e)}</TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </Paper>
 );
 
 export default MyTable;

@@ -28,7 +28,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 const styles = theme => ({
   background: {},
-  root: { overflowX: "hidden" },
+  root: { width: "100%", overflowX: "hidden" },
   progress: { margin: theme.spacing(2) }
 });
 
