@@ -1,7 +1,7 @@
 import { DB_NAME } from "../constants";
 import { countIO } from "../requests";
 
-const getStats = async (client, stats_type, listId_entries, listId_output) => {
+const getStats = async (client, listId_entries, listId_output) => {
   const db = client.db(DB_NAME);
   const date_debut_j7 = new Date();
   date_debut_j7.setDate(date_debut_j7.getDate() - 7);
