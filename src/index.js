@@ -3,6 +3,7 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
 import { enableLiveReload } from "electron-compile";
+import { WIDTH, HEIGHT } from "./constants";
 
 require("update-electron-app")({ repo: "jessy-bgl/wekan-reporting" });
 
@@ -16,7 +17,7 @@ if (isDevMode) enableLiveReload({ strategy: "react-hmr" });
 
 const createWindow = async () => {
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 800, height: 600 });
+  mainWindow = new BrowserWindow({ width: WIDTH, height: HEIGHT });
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`);

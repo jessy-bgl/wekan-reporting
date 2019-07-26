@@ -1,3 +1,6 @@
+export const WIDTH = 800;
+export const HEIGHT = 600;
+
 export const URL = "http://192.168.237.206";
 export const MONGO_URL = "mongodb://192.168.237.206:27017";
 export const DB_NAME = "wekan";

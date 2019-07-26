@@ -29,6 +29,7 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import NavigateNext from "@material-ui/icons/NavigateNext";
 
 const styles = theme => ({
   background: {},
@@ -144,7 +145,6 @@ class Dashboard extends React.Component {
         // Stats Preparation Commande
         const stats_preparation_commande = await getStats(
           client,
-          "stats_preparation_commande",
           ID_LIST_COMMANDE_A_PREPARER,
           ID_LIST_COMMANDE_A_EXPEDIER
         );
@@ -152,7 +152,6 @@ class Dashboard extends React.Component {
         // Stats SAV
         const stats_sav = await getStats(
           client,
-          "stats_preparation_commande",
           ID_LIST_SAV_A_TRAITER,
           ID_LIST_SAV_A_RETOURNER
         );
@@ -211,7 +210,7 @@ class Dashboard extends React.Component {
             <Divider />
             <Table columns={COLUMNS} data={data2} />
           </Paper>
-          <Grid container justify="flex-end">
+          <Grid container justify="flex-end" style={{ marginTop: 10 }}>
             <Button
               variant="contained"
               color="primary"
@@ -219,7 +218,8 @@ class Dashboard extends React.Component {
               component={Link}
               className={classes.margin}
             >
-              Historique
+              Historique détaillé
+              <NavigateNext />
             </Button>
           </Grid>
         </MuiThemeProvider>
