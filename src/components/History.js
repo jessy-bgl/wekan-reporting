@@ -8,7 +8,9 @@ import {
   ID_LIST_COMMANDE_A_EXPEDIER,
   ID_LIST_COMMANDE_A_PREPARER,
   ID_LIST_SAV_A_TRAITER,
-  ID_LIST_SAV_A_RETOURNER
+  ID_LIST_SAV_A_RETOURNER,
+  ID_LIST_PRETS_EN_COURS,
+  ID_LIST_RECEPTION_PRETS
 } from "../constants";
 
 import Button from "@material-ui/core/Button";
@@ -40,7 +42,7 @@ const styles = theme => ({
 class History extends Component {
   constructor(props) {
     super(props);
-    this.state = { dtp_prepa_com: null, dtp_sav: null };
+    this.state = { dtp_prepa_com: null, dtp_sav: null, dtp_prets: null };
   }
 
   async componentDidMount() {
@@ -55,12 +57,21 @@ class History extends Component {
           ID_LIST_COMMANDE_A_EXPEDIER
         );
         this.setState({ dtp_prepa_com });
+
         const dtp_sav = await getHistory(
           client,
           ID_LIST_SAV_A_TRAITER,
           ID_LIST_SAV_A_RETOURNER
         );
         this.setState({ dtp_sav });
+
+        const dtp_prets = await getHistory(
+          client,
+          ID_LIST_RECEPTION_PRETS,
+          ID_LIST_PRETS_EN_COURS,
+          "moveCard"
+        );
+        this.setState({ dtp_prets });
       }
     );
   }
@@ -101,7 +112,7 @@ class History extends Component {
 
   render() {
     const { classes } = this.props;
-    const { dtp_prepa_com, dtp_sav } = this.state;
+    const { dtp_prepa_com, dtp_sav, dtp_prets } = this.state;
 
     return (
       <Grid container direction="column" justify="center" alignItems="center">
@@ -124,6 +135,17 @@ class History extends Component {
             <LinearProgress className={classes.progress} />
           ) : (
             this.renderChart(dtp_sav)
+          )}
+        </Grid>
+
+        <Grid item style={{ marginTop: 20 }}>
+          <Typography variant="h5">Prêts</Typography>
+        </Grid>
+        <Grid item style={{ width: "100%" }}>
+          {!dtp_prets ? (
+            <LinearProgress className={classes.progress} />
+          ) : (
+            this.renderChart(dtp_prets)
           )}
         </Grid>
 

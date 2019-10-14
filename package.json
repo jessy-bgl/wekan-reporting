@@ -1,8 +1,8 @@
 {
   "name": "WekanReporting",
   "productName": "Wekan Reporting",
-  "version": "1.2.0",
-  "description": "Rapport Wekan",
+  "version": "1.3.0",
+  "description": "Rapport statistiques de Wekan",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",

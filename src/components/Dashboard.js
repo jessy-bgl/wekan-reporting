@@ -10,10 +10,13 @@ import {
   MONGO_URL,
   ID_BOARD_PREPACOM,
   ID_BOARD_SAV,
+  ID_BOARD_PRETS,
   ID_LIST_COMMANDE_A_EXPEDIER,
   ID_LIST_COMMANDE_A_PREPARER,
   ID_LIST_SAV_A_TRAITER,
   ID_LIST_SAV_A_RETOURNER,
+  ID_LIST_PRETS_EN_COURS,
+  ID_LIST_RECEPTION_PRETS,
   AUTO_RELOAD,
   COLUMNS
 } from "../constants";
@@ -53,13 +56,18 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data_preparation_commande: {},
-      data_sav: {},
+      data_preparation_commande: [],
+      data_sav: [],
+      data_prets: [],
       stats_preparation_commande: {
         j7: { archived: null, created: null },
         j30: { archived: null, created: null }
       },
       stats_sav: {
+        j7: { archived: null, created: null },
+        j30: { archived: null, created: null }
+      },
+      stats_prets: {
         j7: { archived: null, created: null },
         j30: { archived: null, created: null }
       }
@@ -97,6 +105,11 @@ class Dashboard extends React.Component {
       "/api/boards/" + ID_BOARD_SAV + "/lists/",
       "data_sav"
     );
+    // Third board : PRETS
+    await self.fetchReport(
+      "/api/boards/" + ID_BOARD_PRETS + "/lists/",
+      "data_prets"
+    );
     // DB Statistics
     await self.fetchStats();
   }
@@ -106,6 +119,7 @@ class Dashboard extends React.Component {
     let self = this;
     const req_lists = await axios.get(url);
     const lists = req_lists.data;
+    let res = [];
     await lists.map(async (list, index) => {
       const listID = list._id;
       const listName = list.title.toUpperCase();
@@ -129,9 +143,15 @@ class Dashboard extends React.Component {
         else nbNotExpired += 1;
       }
       // State update
-      let stateData = await Object.assign({}, self.state[data_type]);
-      stateData[listName] = { nbCardsMA2, nbCardsM2M, nbExpired, nbNotExpired };
-      await self.setState({ [data_type]: stateData });
+      const stateData = [
+        listName,
+        nbCardsMA2,
+        nbCardsM2M,
+        nbExpired,
+        nbNotExpired
+      ];
+      res[index] = stateData;
+      await self.setState({ [data_type]: res });
     });
   }
 
@@ -156,25 +176,18 @@ class Dashboard extends React.Component {
           ID_LIST_SAV_A_RETOURNER
         );
         this.setState({ stats_sav });
-        // CLosing sesion
+        // Stats PRETS
+        const stats_prets = await getStats(
+          client,
+          ID_LIST_RECEPTION_PRETS,
+          ID_LIST_PRETS_EN_COURS,
+          "moveCard"
+        );
+        this.setState({ stats_prets });
+        // CLosing session
         client.close();
       }
     );
-  }
-
-  // convert data to make it printable (table compatibility)
-  convertData(data) {
-    let res = [];
-    Object.keys(data).map(liste => {
-      res.push([
-        liste,
-        data[liste]["nbCardsMA2"],
-        data[liste]["nbCardsM2M"],
-        data[liste]["nbExpired"],
-        data[liste]["nbNotExpired"]
-      ]);
-    });
-    return res;
   }
 
   // Render
@@ -183,17 +196,17 @@ class Dashboard extends React.Component {
     const {
       data_preparation_commande,
       data_sav,
+      data_prets,
       stats_preparation_commande,
-      stats_sav
+      stats_sav,
+      stats_prets
     } = this.state;
 
     const keys1 = Object.keys(data_preparation_commande);
     const keys2 = Object.keys(data_sav);
-    if (keys1.length < 4 || keys2.length < 4)
+    const keys3 = Object.keys(data_prets);
+    if (keys1.length < 4 || keys2.length < 4 || keys3.length < 5)
       return <LinearProgress className={classes.progress} />;
-
-    const data1 = this.convertData(data_preparation_commande);
-    const data2 = this.convertData(data_sav);
 
     return (
       <div className={classes.background}>
@@ -202,14 +215,21 @@ class Dashboard extends React.Component {
             <Title title={"Péparation commande"} />
             <Stats stats={stats_preparation_commande} />
             <Divider />
-            <Table columns={COLUMNS} data={data1} />
+            <Table columns={COLUMNS} data={data_preparation_commande} />
           </Paper>
           <Paper className={classes.root} style={{ marginTop: 10 }}>
             <Title title={"SAV"} />
             <Stats stats={stats_sav} />
             <Divider />
-            <Table columns={COLUMNS} data={data2} />
+            <Table columns={COLUMNS} data={data_sav} />
           </Paper>
+          <Paper className={classes.root} style={{ marginTop: 10 }}>
+            <Title title={"Prêts"} />
+            <Stats stats={stats_prets} />
+            <Divider />
+            <Table columns={COLUMNS} data={data_prets} />
+          </Paper>
+
           <Grid container justify="flex-end" style={{ marginTop: 10 }}>
             <Button
               variant="contained"
